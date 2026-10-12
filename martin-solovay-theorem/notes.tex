@@ -1,0 +1,180 @@
+\documentclass[12pt]{article}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage{amssymb}
+\usepackage{hyperref, fancyhdr, lastpage, fancyvrb, tcolorbox, titlesec}
+\usepackage{array, tabularx, colortbl}
+\usepackage{tikz}
+\usepackage{venndiagram}
+\usepackage{amsthm, bm}
+\usepackage{relsize}
+\usepackage{amsmath,physics}
+\usepackage{mathtools}
+\usepackage{subcaption}
+\usepackage{scalerel}
+\usepackage{theoremref}
+\usepackage{circuitikz}
+\usepackage{geometry}
+\usepackage{stmaryrd}
+\usepackage{forest}
+\usepackage{cancel}
+\usepackage{faktor}
+\usepackage{gensymb}
+\usetikzlibrary{automata, arrows, positioning, shapes}
+\usetikzlibrary{decorations.pathmorphing}
+\useforestlibrary{linguistics}
+
+\ExplSyntaxOn
+\NewDocumentCommand{\opair}{m}
+ {
+  \langle\mspace{2mu}
+  \clist_set:Nn \l_tmpa_clist { #1 }
+  \clist_use:Nn \l_tmpa_clist {,\mspace{3mu plus 1mu minus 1mu}\allowbreak}
+  \mspace{2mu}\rangle
+}
+\ExplSyntaxOff
+
+\hypersetup{
+    colorlinks=true,
+    linktoc=all,
+    linkcolor=blue
+}
+
+% \setlength\parindent{0pt}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\E}{\mathbb{E}}
+
+\newcommand{\vars}{\operatorname{Vars}}
+\newcommand{\free}{\operatorname{Free}}
+
+\newcommand{\logand}{\; \& \;}
+
+\newcommand{\calA}{\mathcal{A}}
+\newcommand{\calS}{\mathcal{S}}
+\newcommand{\calD}{\mathcal{D}}
+\newcommand{\calL}{\mathcal{L}}
+\newcommand{\calZ}{\mathcal{Z}}
+\newcommand{\calQ}{\mathcal{Q}}
+\newcommand{\calR}{\mathcal{R}}
+\newcommand{\calN}{\mathcal{N}}
+\newcommand{\calM}{\mathcal{M}}
+\newcommand{\calF}{\mathcal{F}}
+\newcommand{\calP}{\mathcal{P}}
+\newcommand{\calC}{\mathcal{C}}
+\newcommand{\calG}{\mathcal{G}}
+\newcommand{\calB}{\mathcal{B}}
+
+\newcommand{\continuum}{\mathfrak{c}}
+
+\newcommand{\cof}{\operatorname{cof}}
+\newcommand{\dom}{\operatorname{Dom}}
+\newcommand{\rng}{\operatorname{Rng}}
+
+\newcommand{\MA}{\mathsf{MA}}
+
+\newcommand{\fa}{\kern.05em\ensuremath\forall\kern-.22em\rotatebox{69}{\rule{.73em}{.4pt}}}
+\newcommand{\ex}{\kern.05em\ensuremath\exists\kern-.03em\rotatebox{90}{\rule{.68em}{.35pt}}}
+
+\newcommand{\dequiv}{\stackrel{\text{деф.}}{\longleftrightarrow}}
+
+\newcommand{\db}[1]{\llbracket #1 \rrbracket}
+
+\DeclareMathOperator*{\bigand}{\scalerel*{\&}{\prod}}
+\DeclareMathOperator*{\bigor}{\scalerel*{\lor}{\sum}}
+
+\newtheorem*{theorem}{Theorem}
+\newtheorem*{claim}{Claim}
+% \newtheorem*{definition}{Дефиниция}
+% \newtheorem*{claim}{Твърдение}
+% \newtheorem*{property}{Свойство}
+% \newtheorem*{hint}{Упътване}
+% \theoremstyle{definition}
+% \newtheorem*{solution}{Решение}
+% \newtheorem*{notation}{Нотация}
+% \newtheorem{problem}{Задача}
+
+\title{Martin--Solovay Construction}
+\author{Todor Dukov}
+
+\begin{document}
+\maketitle
+
+\begin{theorem}[Martin--Solovay]
+  Martin's Axiom (or $\MA$ for short) implies that $2^\kappa = \mathfrak{c}$ for all infinite cardinals $\kappa < \mathfrak{c}$, and consequently that $\mathfrak{c}$ is regular.
+\end{theorem}
+
+\begin{proof}
+  Assuming $\MA$, we first show that $2^\kappa \le \mathfrak{c}$ for every infinite cardinal $\kappa < \mathfrak{c}$. 
+
+  Fix an infinite cardinal $\kappa < \mathfrak{c}$.
+  Since there exists an almost disjoint family of size $\mathfrak{c}$, we can select an almost disjoint family $\calA = \{ A_\alpha\}_{\alpha < \kappa}$ of size $\kappa$.
+
+  For any $X \subseteq \kappa$, our goal is to construct a set $B_X \subseteq \omega$ such that for all $\alpha < \kappa$,
+  \begin{align*}
+    \alpha \in X \iff B_X \cap A_\alpha \text{ is infinite.} \tag{$\ast$} \label{coding}
+  \end{align*}
+  If every subset $X \subseteq \kappa$ is uniquely determined by such a $B_X \subseteq \omega$ via
+  \[
+    X = \{ \alpha < \kappa \mid B_X \cap A_\alpha \text{ is infinite} \},
+  \]
+  it yields a surjection from $\mathcal{P}(\omega)$ onto $\mathcal{P}(\kappa)$. Thus, $2^\kappa \le 2^{\aleph_0} = \mathfrak{c}$.
+
+  To construct $B_X$ for a fixed $X \subseteq \kappa$ and almost disjoint family $\calA$, define the partial order $(P_\calA^X, \le_\calA^X)$ as follows:
+  \begin{itemize}
+    \item Conditions are functions $p$ satisfying:
+      \begin{itemize}
+        \item $p \subseteq \omega \times \{0, 1\}$,
+        \item $\mathrm{dom}(p) \cap A_\alpha$ is finite for every $\alpha \in X$,
+        \item $p_+ := \{ n \in \mathrm{dom}(p) \mid p(n) = 1 \}$ is finite.
+      \end{itemize}
+    \item The ordering is reverse inclusion ($p \le_\calA^X q \iff q \subseteq p$).
+  \end{itemize}
+
+  Given a family $\calD$ of dense sets, every $\calD$-generic filter $G \subseteq P_\calA^X$ yields a corresponding subset $B_X := \bigcup \{ p_+ \mid p \in G \}$ of $\omega$.
+  To ensure $B_X$ satisfies \eqref{coding}, we construct $\mathcal{D}$ from the following dense sets for each $\alpha < \kappa$:
+  \begin{itemize}
+    \item For $\alpha \in X$ and $n \in \omega$, let $D'_{\alpha, n} := \{ p \in P_\calA^X \mid p_+ \cap A_\alpha \text{ is of size at least } n \}$. Meeting these sets forces $B_X \cap A_\alpha$ to be infinite.
+    \item For $\alpha \notin X$, let $D''_\alpha := \{ p \in P_\calA^X \mid A_\alpha \subseteq \mathrm{dom}(p) \}$. Meeting these sets forces $B_X \cap A_\alpha$ to be finite.
+  \end{itemize}
+  Since $|\calD| = \kappa < \continuum$, $\MA$ will guarantee the existence of such a $\calD$-generic filter $G$, provided we show that our poset satisfies the countable chain condition and that $\calD$ is indeed a family of dense sets.
+
+  To verify the ccc, note that if $p_+ = q_+$, then $p$ and $q$ are compatible (since $p \cup q$ forms a valid condition).
+  Thus, any antichain in our poset can contain at most one condition for each choice of $p_+$.
+  Since $p_+$ is a finite subset of $\omega$, there are only countably many such choices, so $(P_\calA^X, \leq_\calA^X)$ is ccc.
+  To verify density:
+  \begin{itemize}
+    \item For $D'_{\alpha, n}$ (where $\alpha \in X$ and $n \in \omega$):
+          Given $p \in P_\calA^X$, since $\dom(p) \cap A_\alpha$ is finite, $A_\alpha \setminus \dom(p)$ is infinite.
+          Pick distinct $k_1, \dots, k_n \in A_\alpha \setminus \dom(p)$ and extend $p$ to $p'$ by setting $p'(k_1) = \dots = p'(k_n) = 1$.
+          Since only finitely many values were added, the extension $p'$ is a valid condition in $P_\calA^X$ belonging to $D'_{\alpha, n}$.
+    \item For $D''_\alpha$ (where $\alpha \notin X$):
+          Given $p \in P_\calA^X$, extend $p$ to $p'$ by setting $p'(k) = 0$ for all $k \in A_\alpha \setminus \dom(p)$.
+          Since $p'_+ = p_+$ and $\dom(p')$ extends $A_\alpha$ by only finitely many elements, $p'$ remains a valid condition in $P_\calA^X$ with $A_\alpha \subseteq \dom(p')$, meaning $p' \in D''_\alpha$.
+  \end{itemize}
+  
+  Let $G \subseteq P_\calA^X$ be the $\calD$-generic filter guaranteed by $\MA$.
+  We verify that $B_X$ satisfies \eqref{coding}:
+  \begin{itemize}
+    \item[$(\Rightarrow)$] 
+      Let $\alpha \in X$. 
+      For each $n \in \omega$, $G$ intersects $D'_{\alpha, n}$ in some condition $p$, so $p_+ \cap A_\alpha$ has at least $n$ elements.
+      Since $p_+ \subseteq B_X$, it follows that $B_X \cap A_\alpha$ is of size at least $n$ for all $n \in \omega$, so $B_X \cap A_\alpha$ is infinite.
+    \item[$(\Leftarrow)$] 
+      Let $\alpha \in \kappa \setminus X$.
+      Since $G$ intersects $D''_\alpha$, pick $p \in G \cap D''_\alpha$.
+      Then $A_\alpha \subseteq \dom(p)$, and since all conditions in $G$ are compatible with $p$, no element of $G$ can set $1$ on $A_\alpha \setminus p_+$.
+      Thus $B_X \cap A_\alpha \subseteq p_+$, which is finite.
+  \end{itemize}
+
+  Finally, $\continuum$ is regular, since
+  \[
+    \cof(\continuum) = \cof(2^\kappa) > \kappa \text{ for all } \kappa < \continuum.
+  \]
+\end{proof}
+
+\end{document}
