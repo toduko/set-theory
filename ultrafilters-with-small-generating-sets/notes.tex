@@ -243,7 +243,43 @@ Turns just having each ultrafilter for stage contain the currently added Mathias
 
 \section*{Why $\ufnumber = \kappa$?}
 
+We will show this in two directions.
+First we will show an ultrafilter base of size $\kappa$.
+Then we will prove that no family of size smaller than $\kappa$ forms an ultrafilter base.
+
+Let $\calU_\beta$ be the ultrafilter in step $\beta < \kappa$ of Mathias forcing.
+If for each $\beta < \kappa$, the ultrafilter $\calU_\beta$ contains $\{ s_\delta \}_{\delta < \beta}$, the family $\{ s_\beta \setminus x \mid \beta < \kappa \logand x \text{ is finite} \}$ will form a base for an ultrafilter.
+Let $A \in [\omega]^\omega \cap V_{\lambda, \kappa}$.
+Then since $\kappa$ is regular, $A \in [\omega]^\omega \cap V_{\lambda, \beta}$ for some $\beta < \kappa$.
+This is true because in finite support iterations, limit stages of regular cofinality add no new reals.
+By properties of Mathias forcing, either $A$ or $\omega \setminus A$ almost includes $s_\beta$.
+Therefore, $\ufnumber \leq \kappa$.
+
+We will show that $\kappa \leq \ufnumber$.
+Let $\calA$ be a family of subsets of $\omega$ in $V_{\lambda, \kappa}$ of size less than $\kappa$.
+By similar arguments, $\calA \in V_{\lambda, \beta}$ for some $\beta < \kappa$.
+We will show a set $X \in V_{\lambda, \kappa}$ such that neither $X$ nor $\omega \setminus X$ includes a member of $\calA$.
+Define
+\[
+  X = \{ n \in \omega \mid |n \cap s_\beta| \text{ is even} \}.
+\]
+Assume that either $X$ or $\omega \setminus X$ includes some $A \in \calA$.
+Let $(z, Z)$ be a condition forcing that.
+Let $m = \min Z$ and let $a$ be an element of $A$ that is larger than $m$.
+Then
+\begin{itemize}
+  \item $(z, Z \setminus a)$ is an extension of $(z, Z)$ forcing $a \cap s_\beta = z$.
+  \item $(z \cup \{ m \}, Z \setminus a)$ is an extension of $(z, Z)$ forcing $a \cap s_\beta = z \cup \{ m \}$.
+\end{itemize}
+One of the conditions force $a \in X$ and the other $a \notin X$, which is impossible, since
+\begin{itemize}
+  \item If $(z, Z)$ forces $A \subseteq X$, then $a \notin X$ can't be forced by any extension of $(z, Z)$.
+  \item If $(z, Z)$ forces $A \subseteq \omega \setminus X$, then $a \in X$ can't be forced by any extension of $(z, Z)$.
+\end{itemize}
+We have proved that neither $X$ nor $\omega \setminus X$ includes a member of $\calA$, so $\calA$ can't form an ultrafilter base.
+
 \section*{Construction of the ultrafilters}
+T.B.D.
 
 \newpage
 
