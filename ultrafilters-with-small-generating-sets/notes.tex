@@ -1,0 +1,252 @@
+\documentclass[12pt]{article}\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage{amssymb}
+\usepackage{hyperref, fancyhdr, lastpage, fancyvrb, tcolorbox, titlesec}
+\usepackage{array, tabularx, colortbl}
+\usepackage{tikz}
+\usepackage{venndiagram}
+\usepackage{amsthm, bm}
+\usepackage{relsize}
+\usepackage{amsmath,physics}
+\usepackage{mathtools}
+\usepackage{subcaption}
+\usepackage{scalerel}
+\usepackage{theoremref}
+\usepackage{circuitikz}
+\usepackage{geometry}
+\usepackage{stmaryrd}
+\usepackage{forest}
+\usepackage{cancel}
+\usepackage{faktor}
+\usepackage{gensymb}
+\usepackage{fontawesome5}
+\usetikzlibrary{automata, arrows, positioning, shapes}
+\usetikzlibrary{decorations.pathmorphing}
+\useforestlibrary{linguistics}
+\usepackage{cleveref} % Must be loaded LAST
+
+\ExplSyntaxOn
+\NewDocumentCommand{\opair}{m}
+ {
+  \langle\mspace{2mu}
+  \clist_set:Nn \l_tmpa_clist { #1 }
+  \clist_use:Nn \l_tmpa_clist {,\mspace{3mu plus 1mu minus 1mu}\allowbreak}
+  \mspace{2mu}\rangle
+}
+\ExplSyntaxOff
+
+\hypersetup{
+    colorlinks=true,
+    linktoc=all,
+    linkcolor=blue
+}
+
+% \setlength\parindent{0pt}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\M}{\mathbb{M}}
+\newcommand{\bbH}{\mathbb{H}}
+
+\newcommand{\vars}{\operatorname{Vars}}
+\newcommand{\free}{\operatorname{Free}}
+
+\newcommand{\logand}{\; \& \;}
+
+\newcommand{\calA}{\mathcal{A}}
+\newcommand{\calS}{\mathcal{S}}
+\newcommand{\calD}{\mathcal{D}}
+\newcommand{\calL}{\mathcal{L}}
+\newcommand{\calZ}{\mathcal{Z}}
+\newcommand{\calQ}{\mathcal{Q}}
+\newcommand{\calR}{\mathcal{R}}
+\newcommand{\calN}{\mathcal{N}}
+\newcommand{\calM}{\mathcal{M}}
+\newcommand{\calF}{\mathcal{F}}
+\newcommand{\calP}{\mathcal{P}}
+\newcommand{\calC}{\mathcal{C}}
+\newcommand{\calG}{\mathcal{G}}
+\newcommand{\calB}{\mathcal{B}}
+\newcommand{\calU}{\mathcal{U}}
+
+\newcommand{\continuum}{\mathfrak{c}}
+\newcommand{\ufnumber}{\mathfrak{u}}
+\newcommand{\domnumber}{\mathfrak{d}}
+
+\newcommand{\cof}{\operatorname{cof}}
+\newcommand{\dom}{\operatorname{Dom}}
+\newcommand{\rng}{\operatorname{Rng}}
+
+\newcommand{\MA}{\mathsf{MA}}
+
+\newcommand{\fa}{\kern.05em\ensuremath\forall\kern-.22em\rotatebox{69}{\rule{.73em}{.4pt}}}
+\newcommand{\ex}{\kern.05em\ensuremath\exists\kern-.03em\rotatebox{90}{\rule{.68em}{.35pt}}}
+
+\newcommand{\dequiv}{\stackrel{\text{деф.}}{\longleftrightarrow}}
+
+\newcommand{\db}[1]{\llbracket #1 \rrbracket}
+
+\DeclareMathOperator*{\bigand}{\scalerel*{\&}{\prod}}
+\DeclareMathOperator*{\bigor}{\scalerel*{\lor}{\sum}}
+
+\newtheorem*{theorem}{Theorem}
+\newtheorem{claim}{Claim}
+\theoremstyle{definition}
+\newtheorem*{definition}{Definition}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+\title{On `Ultrafilters with small generating sets`}
+\author{Todor Dukov}
+
+\begin{document}
+\maketitle
+
+\section*{Introduction}
+
+The aim of this document is to give a better understanding of \cite{BlassShelah1989} by filling in details while also giving a high-level overview of the construction.
+We will talk about the ultrafilter number $\ufnumber$ and the dominating number $\domnumber$.
+The main result of \cite{BlassShelah1989} is the consistency of
+\[
+  \ufnumber = \kappa < \domnumber = \continuum = \lambda
+\]
+for any regular $\kappa, \lambda$, such that $\kappa < \lambda$.
+
+The way we would do that is by first adding (with finite support iteration) $\lambda$-many Cohen reals and then very carefully adding $\kappa$-many Mathias reals.
+We shall treat the construction of the ultrafilter for Mathias with utmost care, so that
+\begin{enumerate}
+  \item It does not ruin any work of the Cohen forcing for the dominating number.
+  \item The same Mathias real would be added no matter what level we are on the Cohen forcing iteration.
+\end{enumerate}
+It is obvious why we have the first requirement.
+After Cohen forcing we would have $\domnumber = \continuum = \lambda$.
+We would like to keep it that way during every step of the Mathias forcing.
+It is not so obvious why we need to satisfy the second requirement.
+If we satisfy the second requirement we would get what is called a matrix iteration.
+This would allow for more precise control of the model because we can attack the problem from two sides instead of one which would also help with the first requirement.
+
+Let me try to explain it better.
+Suppose the added Cohen reals are $\{ r_\alpha \}_{\alpha < \lambda}$ and the added Mathias reals are $\{ s_\beta \}_{\beta < \kappa}$.
+For $\alpha < \lambda$ and $\beta < \kappa$ denote
+\[
+  V_{\alpha, \beta} = \mathbb{L}[\{ r_\gamma \}_{\gamma < \alpha}][\{ s_\delta \}_{\delta < \beta}].
+\]
+What we would like is for $V_{\alpha + 1, \beta + 1}$ to be related to both $V_{\alpha, \beta + 1}$ and $V_{\alpha + 1, \beta}$.
+Being related to both would guarantee the niceties of both our Mathias forcing and Cohen forcing.
+This is how it looks visually:
+\begin{figure}[htbp]
+\noindent\hspace*{-1.5cm}
+% Scaled down visually while keeping the internal frame significantly taller and slightly wider
+\scalebox{0.68}{%
+\begin{tikzpicture}[
+    scale=1.2,
+    >=Stealth,
+    dot/.style={circle, fill=black, inner sep=1.2pt},
+    bigdot/.style={circle, fill=black, inner sep=2pt}
+]
+
+    % --- Corners / Outer Bounds ---
+    % Significantly taller (height = 14.0) and slightly wider (width = 13.0)
+    \coordinate (V00) at (0, 0);
+    \coordinate (V0lambda) at (0, 14.0);
+    \coordinate (Vlambdak) at (13.0, 14.0);
+    \coordinate (Vlambda0) at (13.0, 0);
+
+    % Draw outer boundary frame
+    \draw (V00) -- (V0lambda) -- (Vlambdak) -- (Vlambda0) -- cycle;
+
+    % Corner Nodes & Labels
+    % Bottom-left
+    \node[bigdot, label=left:{$V_{0,0} = \mathbb{L}$}] at (V00) {};
+    
+    % Top-left
+    \node[bigdot, label=above left:{$V_{\lambda, 0} = \mathbb{L}^{\mathbb{C}_\lambda}$}] at (V0lambda) {};
+    \draw[->, thick] (V00) -- (V0lambda); % Upward vertical arrow on left edge
+
+    % Top-right (Circled V_{\lambda,\kappa} with 'final model' to its right pointing left)
+    \node[bigdot] at (Vlambdak) {};
+    \node[draw, circle, inner sep=3pt, label=above:{$V_{\lambda, \kappa}$}] (Vlk) at (Vlambdak) {};
+    \node[right=1.5cm of Vlk] (finalmodel) {\small final model};
+    \draw[->] (finalmodel) -- (Vlk);
+
+    % --- Center Grid Inner Square Coordinates ---
+    % x-coordinates for columns beta and beta+1
+    \def\xb{5.5}
+    \def\xbp{7.2}
+    % y-coordinates for rows alpha and alpha+1
+    \def\ya{6.2}
+    \def\yap{7.8}
+
+    \coordinate (Vab) at (\xb, \ya);
+    \coordinate (Vapb) at (\xb, \yap);
+    \coordinate (Vabp) at (\xbp, \ya);
+    \coordinate (Vapbp) at (\xbp, \yap);
+
+    % --- Dashed Column Lines & Labels ---
+    \draw[dashed] (\xb, 0) -- (\xb, 14.0);
+    \draw[dashed] (\xbp, 0) -- (\xbp, 14.0);
+
+    % Column ticks & labels at bottom
+    \draw (\xb, 0.1) -- (\xb, -0.1) node[below=2pt] {$\beta$};
+    \draw (\xbp, 0.1) -- (\xbp, -0.1) node[below=2pt] {$\beta+1$};
+
+    % Column annotation at top
+    \draw[<-] ({(\xb+\xbp)/2}, 14.1) -- ({(\xb+\xbp)/2}, 14.7) 
+        node[above, align=center] {\small the Mathias real\\[-2pt]$s_\beta$ is added here};
+
+    % --- Dashed Row Lines & Labels ---
+    \draw[dashed] (0, \ya) -- (13.0, \ya);
+    \draw[dashed] (0, \yap) -- (13.0, \yap);
+
+    % Row ticks & labels placed close to left edge
+    \draw (0.1, \ya) -- (-0.1, \ya) node[left=2pt] {\small $\alpha$};
+    \draw (0.1, \yap) -- (-0.1, \yap) node[left=2pt] {\small $\alpha+1$};
+
+    % Row annotation on left side shifted out comfortably
+    \node[left=2.2cm of {(-0.1, {(\ya+\yap)/2})}, align=center] (colreal) {\small the Cohen real\\[-2pt]$r_\alpha$ is added here};
+    \draw[->] (colreal) -- (-0.1, {(\ya+\yap)/2});
+
+    % --- Center 2x2 Commutative Square ---
+    % Nodes
+    \node[dot] (d1) at (Vab) {};
+    \node[dot] (d2) at (Vapb) {};
+    \node[dot] (d3) at (Vabp) {};
+    \node[dot] (d4) at (Vapbp) {};
+
+    % Square Arrows
+    \draw[->] (d1) -- (d2);
+    \draw[->] (d1) -- (d3);
+    \draw[->] (d2) -- (d4);
+    \draw[->] (d3) -- (d4);
+
+    % Node Labels
+    \node[below left=3pt and 3pt of d1] {$V_{\alpha, \beta}$};
+    \node[above left=3pt and 3pt of d2] {$V_{\alpha+1, \beta} = V_{\alpha, \beta}[r_\alpha]$};
+    \node[below right=3pt and 3pt of d3] {$V_{\alpha, \beta+1} = V_{\alpha, \beta}[s_\beta]$};
+    \node[above right=3pt and 3pt of d4] {$V_{\alpha+1, \beta+1} = V_{\alpha+1, \beta}[s_\beta] = V_{\alpha, \beta+1}[r_\alpha]$};
+
+\end{tikzpicture}%
+}
+\end{figure}
+
+The method was introduced in \cite{BlassShelah1989}.
+It was further developed in \cite{BrendleFischer2011}, where the terminology \textit{matrix iteration} appeared for the first time.
+Since first introduced, it has proven very useful in tackling combinatorial problems concerning cardinal characteristics of the reals.
+
+So we talked about what we want for $\domnumber$, but what about $\ufnumber$?
+Why would we have $\ufnumber = \kappa$ in the end?
+Turns just having each ultrafilter for stage contain the currently added Mathias reals is enough, as we shall see next.
+
+\section*{Why $\ufnumber = \kappa$?}
+
+\section*{Construction of the ultrafilters}
+
+\newpage
+
+\bibliographystyle{acm}
+\bibliography{../refs.bib}
+\end{document}
