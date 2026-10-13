@@ -70,6 +70,7 @@
 \newcommand{\calN}{\mathcal{N}}
 \newcommand{\calM}{\mathcal{M}}
 \newcommand{\calF}{\mathcal{F}}
+\newcommand{\calI}{\mathcal{I}}
 \newcommand{\calP}{\mathcal{P}}
 \newcommand{\calC}{\mathcal{C}}
 \newcommand{\calG}{\mathcal{G}}
@@ -100,6 +101,8 @@
 \newtheorem*{definition}{Definition}
 \newtheorem*{theorem}{Theorem}
 \newtheorem{claim}{Claim}
+\newtheorem{lemma}{Lemma}
+\newtheorem*{fact}{Fact}
 \theoremstyle{remark}
 \newtheorem*{remark}{Remark}
 
@@ -377,7 +380,7 @@ Going up with Cohen forcing adds unbounded reals.
 What we'd like is to keep it that way when going right with Mathias forcing.
 Also we would like to have our diagram commute (as shown in the picture before).
 That what this means formally is the following:
-\begin{claim}
+\begin{lemma}\label{main-lemma}
   Let $\calM_1$ and $\calM_2$ be models of \textbf{ZFC} such that $\calM_1$ is an inner model of $\calM_2$.
   Let $g \in \omega_\omega \cap \calM_2$ be unbounded over $\calM_1$ and let $\calU_1$ be an ultrafilter in $\calM_1$.
   Then there exists and ultrafilter $\calU_2$ in $\calM_2$ such that:
@@ -388,12 +391,21 @@ That what this means formally is the following:
         \Vdash_{\M(\calU_2)} \text{``$\tau_f$ does not dominate $\mathring{g}$``}.
       \]
   \end{enumerate}
-\end{claim}
+\end{lemma}
 
 We shall proceed as in \cite{BlassShelah1989}, albeit more carefully.
 Before we dive into the proof, let's make some clarifying remarks:
 
-Having $(1)$ means that if $G_2$ is a $\M(\calU_2)$-generic in $\calM_2$, then the set $G_1 := G_2 \cap \M(\calU_1)$ is $\M(\calU_1)$-generic in $\calM_1$, since it intersects every maximal antichain in $\calM(\calU_1)$.
+First, we'll start with a definition to make things easier.
+A finite set $a \subseteq \omega$ is permitted by a condition $(b, B)$ if $b \subseteq a$ and $a \setminus b \subseteq B$.
+This is equivalent to saying that $a$ is a first component of a condition extending $(b, B)$, as we can take the first component to be a suitable final segment of $B$, like $B \setminus a$.
+Note that a finite set $c$ is permitted by $(a, A)$ and $(b, B)$ if and only if those two conditions are compatible.
+If $c$ is permitted by both $(a, A)$ and $(b, B)$ then $(c, A \cap B)$ is a common extension.
+The other direction is trivial.
+This would imply that an conditions incompatible in $\M(\calU_1)$ are incompatible in $\M(\calU_2)$, therefore every antichain in $\M(\calU_1)$ is an antichain in $\M(\calU_2)$.
+That means for $(1)$ we only need to check that maximality is preserved.
+
+What follows from $(1)$ is that if $G_2$ is a $\M(\calU_2)$-generic in $\calM_2$, then the set $G_1 := G_2 \cap \M(\calU_1)$ is $\M(\calU_1)$-generic in $\calM_1$, since it intersects every maximal antichain in $\calM(\calU_1)$.
 Also, the Mathias real $s(G_2)$ from adjoining $G_2$ to $\calM_2$ is the same as the Mathias real $s(G_1)$ from adjoining $G_1$ to $\calM_1$.
 This is true, because if $(a, A) \in G_2$ forces $a \subseteq s(G_2)$, then $(a, \omega \setminus \min A)$ is in $G_2$ (because it is closed upwards).
 Also, $\omega \setminus \min A$ is cofinite, so it trivially belongs to $\calU_1$, thus $(a, \omega \setminus \min A) \in G_1$.
@@ -416,6 +428,168 @@ We can easily change $f$ to a normalized name $f'$ (by bumping up the possible v
   p \Vdash_{\M(\calU_2)} (\forall n \in \omega)(\tau_{f'}(n) \geq \mathring{g}(n)).
 \]
 Thus, a counterexample for $(2)$ will produce a counterexample for $(2')$.
+
+\begin{proof}
+  Let's first talk about the idea of forbidden sets.
+  They were first introduced in \cite{BlassShelah1989} and later adapted in \cite{BrendleFischer2011} to fit similar needs.
+  Forbidden sets are sets in $\calM_2$ that would violate $(1)$ or $(2)$, should they be included in $\calU_2$.
+  Let us look at each type of violation separately.
+  
+  Suppose $(1)$ were not true for $\calU_2 \supseteq \calU_1$.
+  That means there is an antichain $L$ in $\M(\calU_1)$ that is not maximal in $\M(\calU_2)$.
+  Since $L$ is not maximal in $\M(\calU_2)$, there is a condition $(a, A)$ in $\M(\calU_2)$ that is incompatible with all elements of $L$.
+  We will call the set $A$ (which is a set in $\calU_2 \setminus \calU_1$) \textit{forbidden (of the first type)} by $a$ and $L$.
+  
+  A violation of $(2')$ (and equivalently of $(2)$) is a normalized name $f = (A_n, f_n)_{n \in \omega}$ and a condition $(b, B)$ in $\M(\calU_2)$ such that
+  \[
+    (b, B) \Vdash_{\M(\calU_2)} (\forall n \in \omega) (\tau_f(n) \geq \mathring{g}(n)).
+  \]
+  Since $f$ is a normalized name, we can reformulate this as follows
+  \[
+    (b, B) \text{ is incompatible with every } p \in A_n \text{ such that } f_n(p) < g(n).
+  \]
+  In such cases we will call $B$ \textit{forbidden (of the second type)} by $f$ and $b$.
+
+  Since incompatibility can be formulated in terms of a finite set being permissible, which in turn only talks about the conditions we are comparing.
+  We can talk about a set being forbidden of either type without ever mentioning $\calU_2$.
+  This is important since we don't want a circular definition.
+
+  What we want now is to extend the filter $\calU_1$ in $\calM_2$ (it's only an ultrafilter in $\calM_1$) to an ultrafilter, so that it contains no forbidden sets of either type.
+  We will use the following result that follows from Zorn's lemma:
+  \begin{fact}
+    Let $\calF$ be a filter on $X$ and $\calI$ be an ideal on $X$.
+    If $\calF \cap \calI = \varnothing$, then there exists an ultrafilter $\calU$ such that
+    \[
+      \calF \subseteq \calU \text{ and } \calU \cap \calI = \varnothing.
+    \]
+  \end{fact}
+  The ideal here would be the one generated by the forbidden sets.
+  So it's sufficient to prove that no set in $\calU_1$ is covered by finitely many forbidden sets.
+  
+  Suppose the contrary.
+  Let $Z \in \calU_1$ be covered by $A_1, \dots A_n, B_1, \dots, B_k$ where each $A_i$ is forbidden of the first type by $a_i$ and $L_i$ and each $B_i$ is forbidden of the second type by $f^{(i)}$ and $b_i$.
+  Since repetition is allowed, we can safely assume $n = k$.
+  Also, we can assume that all $f^{(i)}$ are equal to some $f = (W_n, f_n)_{n \in \omega}$, since we can take the pointwise maximum of $f^{(1)}, \dots, f^{(k)}$ and $B_1, \dots, B_k$ would still remain forbidden.
+  Since subsets of forbidden sets are also forbidden, we can safely assume that $A_1, \dots, A_k, B_1, \dots, B_k$ are pairwise disjoint subsets of $Z$.
+  Lastly, let $n_0 = 1 + \max \{ a_1, \dots, a_k, b_1, \dots, b_k \}$.
+  We can assume that $Z \subseteq \omega \setminus n_0$.
+
+  I claim that for every $n \in \omega$ there is a $h(n) > n$ such that whenever $Z \cap [n, h(n))$ is partitioned into $2k$ pieces there is a piece $P$ of the partition such that:
+  \begin{enumerate}[(i)]
+    \item For each $1 \leq i \leq k$ there is a set $e \subseteq P$ such that $a_i \cup P$ is permitted by an element of $L_i$.
+    \item For each $1 \leq i \leq k$ there is a set $e \subseteq P$ such that $b_i \cup P$ is permitted by some $p \in A_n$ such that $f_n(p) < h(n)$.
+  \end{enumerate}
+  Clearly, this claim is absolute, so we will prove it in $\calM_1$.
+  Suppose that for some $n \in \omega$ this were not true.
+  Let's take a look at the set
+  \[
+    \calP = \{ X \mid X \text{ is a } 2k \text{ piece partition of } Z \cap [n, t) \text{ for some } t \in \omega \}.
+  \]
+  Define a relation $\preceq$ on $\calP$ as follows
+  \[
+    X_1 \preceq X_2 \text{ if and only if } (\forall P_1 \in X_1) (\exists P_2 \in X_2) (P_1 \subseteq P_2).
+  \]
+  Consider the following subset of $\calP$
+  \[
+    \calP_{bad} = \{ X \in \calP \mid \text{there is no } P \in X \text{ that satisfies both } (i) \text{ and } (ii) \}
+  \]
+  The ordered set $(\calP, \preceq)$ is a clearly finitely branching infinite forest and $\calP_{bad}$ is infinite, hence $(\calP_{bad}, \preceq \cap \calP_{bad} \cross \calP_{bad})$ is also a finitely branching infinite forest.
+  By König's lemma, there is an infinite path $\pi$ in the forest.
+  Taking the limit of $\pi$ (by taking appropriate unions of elements of elements in the path), we obtain a partition $X$ of $Z$ into $2k$ pieces.
+  Since $\calU_1$ is an ultrafilter, it contains one of these pieces, call that piece $P$.
+  We shall make $h(n) > n$ large enough, so that $X \restriction h(n)$ (which has the obvious meaning) is well-defined (a partition of $2k$ pieces) and is not in $\calP_{bad}$ and $P \restriction h(n)$ is a witness to it, which would be a contradiction, because all well-defined restrictions of $X$ are in $\calP_{bad}$.
+
+  Consider $1 \leq i \leq k$.
+  Since $L_i$ is a maximal antichain in $\M(\calU_1)$, some $p \in L_i$ is compatible with $(a_i, P)$ (otherwise it would not be maximal).
+  A common extension of $p$ and $(a_i, P)$ is of the form $(a_i \cup e, P')$, where $e \subseteq P$ and $a_i \cup e$ is permitted by $p$.
+  Thus, (i) holds for $X \restriction h(n)$ and $P \restriction h(n)$ for large enough $h(n)$.
+  By large enough, we mean that we want to guarantee that:
+  \begin{itemize}
+    \item $X \restriction h(n)$ is well-defined,
+    \item $P \restriction h(n)$ would contain the witness $e$ for all $i$.
+  \end{itemize}
+
+  Again, consider $1 \leq i \leq k$.
+  Since $W_n$ is a maximal antichain in $\M(\calU_1)$, some $p \in W_n$ is compatible with $(b_i, P)$ (otherwise it would not be maximal).
+  A common extension of $p$ and $(b_i, P)$ is of the form $(b_i \cup e, P')$, where $e \subseteq P$ and $b_i \cup e$ is permitted by $p$.
+  Thus, (ii) holds for $X \restriction h(n)$ and $P \restriction h(n)$ for large enough $h(n)$.
+  By large enough, we mean that we want to guarantee that:
+  \begin{itemize}
+    \item $X \restriction h(n)$ is well-defined,
+    \item $P \restriction h(n)$ would contain the witness $e$ for all $i$,
+    \item for all $i$ and their respective $p$ we have $f_n(p) < h(n)$.
+  \end{itemize}
+  
+  Since we have satisfied (i) and (ii) for piece $P \restriction h(n)$ in a partition $X \restriction h(n)$ in $\calP_{bad}$, we have obtained our desired contradiction.
+
+  Now, fix a function $h : \omega \longrightarrow \omega$ as in the above claim.
+  Since we proved the claim in $\calM_1$, we can take $h$ to be in $\calM_1$.
+  By absoluteness the same $h$ works in $\calM_2$.
+  Let $n \geq n_0$.
+  Partition $Z$ into the sets $A_i \cap [n, h(n))$ and $B_i \cap [n, h(n))$.
+  Since making $h(n)$ bigger would not ruin its properties, we can safely assume that it is large enough so that the aforementioned sets are all nonempty.
+  Then one of those pieces satisfies (i) and (ii).
+
+  Suppose $P = A_i \cap [n, h(n))$ for some $i$.
+  By (i), there is an $e \subseteq P \subseteq A_i$ such that $a_i \cup e$ is permitted by some $p \in L_i$.
+  As $(a_i, A_i)$ also permits $a_i \cup e$, the conditions $(a_i, A_i)$ and $p$ are compatible.
+  This directly contradicts the fact that $A_i$ is forbidden (of the first type) by $a_i$ and $L_i$.
+
+  Therefore, $P = B_i \cap [n, h(n))]$ for some $i$.
+  By (ii), there is an $e \subseteq P \subseteq B_i$ such that $b_i \cup e$ is permitted by some $p \in W_n$ such that $f_n(p) < h(n)$.
+  Since $(b_i, B_i)$ also permits $a_i \cup e$, the conditions $(b_i, B_i)$ and $p$ are compatible.
+  The set $B_i$ is forbidden (of the second type) by $f$ and $b_i$, so for any $q \in W_n$ that is compatible with $(b_i, B_i)$ satisfies
+  \[
+    f_n(q) \geq g(n).
+  \]
+  In particular, this is true for $q = p$, so
+  \[
+    h(n) > f_n(p) \geq g(n).
+  \]
+  We have just shown that
+  \[
+    (\forall n \geq n_0) (h(n) > g(n)).
+  \]
+  This contradicts our assumption about $g$ not being dominated by any function in $\calM_1$.
+\end{proof}
+
+The way that we would proceed with using \cref{main-lemma} is by building a $\lambda$-tower of ultrafilters (going up means using \cref{main-lemma} for the appropriate Cohen real) and then do Mathias forcing relativized to those ultrafilters.
+Then build a tower again using the same technique and go right by Mathias forcing.
+We do this tower-building $\kappa$ many times.
+
+Here's a reminder of what we want locally:
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}[node distance=5cm, auto, >=stealth]
+    % Define nodes with bullet dots and precise label distance
+    \node[label={[label distance=-1pt]215:$V_{\alpha, \beta}$}] (Vab) at (0,0) {$\bullet$};
+    \node[label={[label distance=-1pt]145:$V_{\alpha+1, \beta}$}] (Va1b) at (0,4) {$\bullet$};
+    \node[label={[label distance=-1pt]325:$V_{\alpha, \beta+1}$}] (Vab1) at (5,0) {$\bullet$};
+    \node[label={[label distance=-1pt]35:$V_{\alpha+1, \beta+1}$}] (Va1b1) at (5,4) {$\bullet$};
+
+    % Bottom arrow: V_{\alpha, \beta} -> V_{\alpha, \beta+1}
+    \draw[->, dashed] (Vab) -- (Vab1) 
+      node[midway, above] {$\mathbb{M}(\mathcal{U}_{\alpha, \beta})$}
+      node[midway, below] {adds $s_\beta$};
+
+    % Top arrow: V_{\alpha+1, \beta} -> V_{\alpha+1, \beta+1}
+    \draw[->, dashed] (Va1b) -- (Va1b1) 
+      node[midway, above] {$\mathbb{M}(\mathcal{U}_{\alpha+1, \beta})$}
+      node[midway, below] {adds $s_\beta$};
+
+    % Left arrow: V_{\alpha, \beta} -> V_{\alpha+1, \beta}
+    \draw[->, dashed] (Vab) -- (Va1b) 
+      node[midway, left=4pt] {$\mathbb{C}$}
+      node[midway, right=2pt, align=left] {adds $r_\alpha$ \\ which is \\ unbounded};
+
+    % Right arrow: V_{\alpha, \beta+1} -> V_{\alpha+1, \beta+1}
+    \draw[->, dashed] (Vab1) -- (Va1b1) 
+      node[midway, left=4pt] {$\mathbb{C}$}
+      node[midway, right=2pt, align=left] {$r_\alpha$ is still unbounded \\ so it can be added \\ the same};
+  \end{tikzpicture}
+\end{figure}
+
+\newpage
 
 \section*{Constructing the ultrafilters (formally)}
 
