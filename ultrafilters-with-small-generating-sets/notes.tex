@@ -126,17 +126,18 @@ We shall treat the construction of the ultrafilter for Mathias with utmost care,
   \item The same Mathias real would be added no matter what level we are on the Cohen forcing iteration.
 \end{enumerate}
 It is obvious why we have the first requirement.
-After Cohen forcing we would have $\domnumber = \continuum = \lambda$.
+After Cohen forcing we would have $\domnumber = \continuum = \lambda$ (if we start with a model of \textbf{CH}).
 We would like to keep it that way during every step of the Mathias forcing.
 It is not so obvious why we need to satisfy the second requirement.
 If we satisfy the second requirement we would get what is called a matrix iteration.
 This would allow for more precise control of the model because we can attack the problem from two sides instead of one which would also help with the first requirement.
 
 Let me try to explain it better.
+Let $V$ be the ground model.
 Suppose the added Cohen reals are $\{ r_\alpha \}_{\alpha < \lambda}$ and the added Mathias reals are $\{ s_\beta \}_{\beta < \kappa}$.
 For $\alpha < \lambda$ and $\beta < \kappa$ denote
 \[
-  V_{\alpha, \beta} = \mathbb{L}[\{ r_\gamma \}_{\gamma < \alpha}][\{ s_\delta \}_{\delta < \beta}].
+  V_{\alpha, \beta} = V[\{ r_\gamma \}_{\gamma < \alpha}][\{ s_\delta \}_{\delta < \beta}].
 \]
 What we would like is for $V_{\alpha + 1, \beta + 1}$ to be related to both $V_{\alpha, \beta + 1}$ and $V_{\alpha + 1, \beta}$.
 Being related to both would guarantee the niceties of both our Mathias forcing and Cohen forcing.
@@ -162,10 +163,10 @@ This is how it looks visually:
 
     % Corner Nodes & Labels
     % Bottom-left
-    \node[bigdot, label=left:{$V_{0,0} = \mathbb{L}$}] at (V00) {};
+    \node[bigdot, label=left:{$V_{0,0} = V$}] at (V00) {};
     
     % Top-left
-    \node[bigdot, label=above left:{$V_{\lambda, 0} = \mathbb{L}^{\mathcal{C}_\lambda}$}] at (V0lambda) {};
+    \node[bigdot, label=above left:{$V_{\lambda, 0} = V^{\mathbb{C}_\lambda}$}] at (V0lambda) {};
     \draw[->, thick] (V00) -- (V0lambda); % Upward vertical arrow on left edge
 
     % Top-right
