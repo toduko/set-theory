@@ -2,6 +2,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T2A]{fontenc}
 \usepackage{amssymb}
+\usepackage{enumerate}
 \usepackage{hyperref, fancyhdr, lastpage, fancyvrb, tcolorbox, titlesec}
 \usepackage{array, tabularx, colortbl}
 \usepackage{tikz}
@@ -39,7 +40,8 @@
 \hypersetup{
     colorlinks=true,
     linktoc=all,
-    linkcolor=blue
+    linkcolor=blue,
+    citecolor=blue
 }
 
 % \setlength\parindent{0pt}
@@ -51,6 +53,7 @@
 \newcommand{\E}{\mathbb{E}}
 \newcommand{\M}{\mathbb{M}}
 \newcommand{\bbH}{\mathbb{H}}
+\newcommand{\bbP}{\mathbb{P}}
 
 \newcommand{\vars}{\operatorname{Vars}}
 \newcommand{\free}{\operatorname{Free}}
@@ -93,10 +96,10 @@
 \DeclareMathOperator*{\bigand}{\scalerel*{\&}{\prod}}
 \DeclareMathOperator*{\bigor}{\scalerel*{\lor}{\sum}}
 
-\newtheorem*{theorem}{Theorem}
-\newtheorem{claim}{Claim}
 \theoremstyle{definition}
 \newtheorem*{definition}{Definition}
+\newtheorem*{theorem}{Theorem}
+\newtheorem{claim}{Claim}
 \theoremstyle{remark}
 \newtheorem*{remark}{Remark}
 
@@ -140,7 +143,6 @@ Being related to both would guarantee the niceties of both our Mathias forcing a
 This is how it looks visually:
 \begin{figure}[htbp]
 \noindent\hspace*{-1.5cm}
-% Scaled down visually while keeping the internal frame significantly taller and slightly wider
 \scalebox{0.68}{%
 \begin{tikzpicture}[
     scale=1.2,
@@ -150,7 +152,6 @@ This is how it looks visually:
 ]
 
     % --- Corners / Outer Bounds ---
-    % Significantly taller (height = 14.0) and slightly wider (width = 13.0)
     \coordinate (V00) at (0, 0);
     \coordinate (V0lambda) at (0, 14.0);
     \coordinate (Vlambdak) at (13.0, 14.0);
@@ -164,20 +165,18 @@ This is how it looks visually:
     \node[bigdot, label=left:{$V_{0,0} = \mathbb{L}$}] at (V00) {};
     
     % Top-left
-    \node[bigdot, label=above left:{$V_{\lambda, 0} = \mathbb{L}^{\mathbb{C}_\lambda}$}] at (V0lambda) {};
+    \node[bigdot, label=above left:{$V_{\lambda, 0} = \mathbb{L}^{\mathcal{C}_\lambda}$}] at (V0lambda) {};
     \draw[->, thick] (V00) -- (V0lambda); % Upward vertical arrow on left edge
 
-    % Top-right (Circled V_{\lambda,\kappa} with 'final model' to its right pointing left)
+    % Top-right
     \node[bigdot] at (Vlambdak) {};
     \node[draw, circle, inner sep=3pt, label=above:{$V_{\lambda, \kappa}$}] (Vlk) at (Vlambdak) {};
     \node[right=1.5cm of Vlk] (finalmodel) {\small final model};
     \draw[->] (finalmodel) -- (Vlk);
 
     % --- Center Grid Inner Square Coordinates ---
-    % x-coordinates for columns beta and beta+1
     \def\xb{5.5}
     \def\xbp{7.2}
-    % y-coordinates for rows alpha and alpha+1
     \def\ya{6.2}
     \def\yap{7.8}
 
@@ -190,12 +189,12 @@ This is how it looks visually:
     \draw[dashed] (\xb, 0) -- (\xb, 14.0);
     \draw[dashed] (\xbp, 0) -- (\xbp, 14.0);
 
-    % Column ticks & labels at bottom
-    \draw (\xb, 0.1) -- (\xb, -0.1) node[below=2pt] {$\beta$};
-    \draw (\xbp, 0.1) -- (\xbp, -0.1) node[below=2pt] {$\beta+1$};
+    % Column ticks & labels at TOP instead of bottom
+    \draw (\xb, 13.9) -- (\xb, 14.1) node[above=1pt] {$\beta$};
+    \draw (\xbp, 13.9) -- (\xbp, 14.1) node[above=1pt] {$\beta+1$};
 
-    % Column annotation at top
-    \draw[<-] ({(\xb+\xbp)/2}, 14.1) -- ({(\xb+\xbp)/2}, 14.7) 
+    % Column annotation shifted above the top indices
+    \draw[<-] ({(\xb+\xbp)/2}, 14.7) -- ({(\xb+\xbp)/2}, 15.3) 
         node[above, align=center] {\small the Mathias real\\[-2pt]$s_\beta$ is added here};
 
     % --- Dashed Row Lines & Labels ---
@@ -206,12 +205,11 @@ This is how it looks visually:
     \draw (0.1, \ya) -- (-0.1, \ya) node[left=2pt] {\small $\alpha$};
     \draw (0.1, \yap) -- (-0.1, \yap) node[left=2pt] {\small $\alpha+1$};
 
-    % Row annotation on left side shifted out comfortably
+    % Row annotation on left side
     \node[left=2.2cm of {(-0.1, {(\ya+\yap)/2})}, align=center] (colreal) {\small the Cohen real\\[-2pt]$r_\alpha$ is added here};
     \draw[->] (colreal) -- (-0.1, {(\ya+\yap)/2});
 
     % --- Center 2x2 Commutative Square ---
-    % Nodes
     \node[dot] (d1) at (Vab) {};
     \node[dot] (d2) at (Vapb) {};
     \node[dot] (d3) at (Vabp) {};
@@ -278,7 +276,152 @@ One of the conditions force $a \in X$ and the other $a \notin X$, which is impos
 \end{itemize}
 We have proved that neither $X$ nor $\omega \setminus X$ includes a member of $\calA$, so $\calA$ can't form an ultrafilter base.
 
-\section*{Construction of the ultrafilters}
+\newpage
+
+\section*{On normalized names}
+
+Before proceeding forward.
+We shall introduce (as it was done in \cite{BlassShelah1989}) a new type of name for functions $f : \omega \longrightarrow \omega$.
+Let $(\bbP, \leq)$ be a forcing poset in a model $\calM$ of \textbf{ZFC}.
+A normalized $\bbP$-name for a function in $\calM$ will be every $f = (A_n, f_n)_{n \in \omega}$, such that
+\begin{itemize}
+  \item $A_n$ is a maximal antichain.
+  \item $f_n : A_n \longrightarrow \omega$.
+\end{itemize}
+Let $G$ be a $\bbP$-generic filter in $\calM$.
+Then the denotation of $f$ with respect to $G$ (written as $f_G$) is the function
+\[
+  \{ (n, f_n(p)) \mid n \in \omega \logand p \in G \cap W_n \}.
+\]
+Since for each $n \in \omega$ the set $G \cap W_n$ is a singleton, $f_G$ is a well-defined function.
+
+We will prove the this notion of naming for functions is equivalent to the usual one.
+\begin{claim}
+  For every normalized $\bbP$-name $f \in \calM$ there exists a standard $\bbP$-name $\tau^{f} \in \calM$, such that for each $\bbP$-generic filter $G$ in $\calM$:
+  \[
+    f_G = (\tau_f)_G.
+  \]
+\end{claim}
+
+\begin{proof}
+  We can define the name explicitly as follows:
+  \[
+    \tau_f = \{ (\operatorname{op}(\check{n}, \check{f_n(p)}), p) \mid n \in \omega \logand p \in W_n \}.
+  \]
+  The rest is easy to check.
+\end{proof}
+
+\begin{claim}
+  For every standard $\bbP$-name $\tau \in \calM$ for a function there exists a normalized $\bbP$-name $f \in \calM$, such that for each $\bbP$-generic filter $G$ in $\calM$:
+  \[
+    \tau_G = f_G.
+  \]
+\end{claim}
+
+\begin{proof}
+  Since $\tau$ is a name for a function, that means
+  \[
+    \Vdash_{\bbP} \tau : \omega \longrightarrow \omega.
+  \]
+  Then for each $n \in \omega$, the following set is dense
+  \[
+    D_n = \{ p \in \bbP \mid (\exists k \in \omega)(p \Vdash_\bbP \tau(k) = \check{n}) \}.
+  \]
+  For each $n \in \omega$, choose (by Zorn's lemma) a maximal antichain $A_n \subseteq D_n$.
+  Define the function $f_n$ as follows
+  \[
+    f_n(p) = k_p \text{ for all } p \in A_n \text{, where } k_p \in \omega \text{ is the unique witness to } p \in D_n.
+  \]
+  Set $f = (A_n, f_n)_{n \in \omega}$.
+  The rest is easy to check.
+\end{proof}
+
+Working below a certain condition, one can obtain an even stronger result than the previous one:
+\begin{claim}
+  Let $\tau \in \calM$ be a standard $\bbP$-name and $p \in \bbP$ be a condition such that
+  \[
+    p \Vdash_\bbP \tau : \omega \longrightarrow \omega.
+  \]
+  Then there exists a normalized name $f$ such that for each $\bbP$-generic filter $G$ in $\calM$ containing $p$, we have
+  \[
+    \tau_G = f_G.
+  \]
+\end{claim}
+
+\begin{proof}
+  Like previously, for each $n \in \omega$, the following sets are dense below $p$
+  \[
+    D^p_n = \{ q \in \bbP \mid q \leq p \logand (\exists k \in \omega)(p \Vdash_\bbP \tau(k) = \check{n}) \}.
+  \]
+  Now choose for each $n \in \omega$, a maximal antichain $A^p_n$ that is a subset of $D^p_n$.
+  For each $q \in A^p_n$ choose a witness $k_q \in \omega$ to $q \in D^p_n$.
+  Let $A$ be a maximal antichain that is incompatible with $p$.
+  Then for each $n \in \omega$, the set $A_n = A^p_n \cup A$ is a maximal antichain in $\bbP$, for an element that is incompatible with $A_n$ must be compatible with one in $A$ due to maximality and vice versa.
+  Define the function $f_n$ as follows
+  \[
+    f_n(p) = \begin{cases} 
+               k_p, & \text{if } p \in A_n^p \\ 
+               0,   & \text{if } p \in A.
+             \end{cases}
+  \]
+  Set $f = (A_n, f_n)_{n \in \omega}$.
+  The rest is easy to check.
+\end{proof}
+
+\newpage
+
+\section*{Constructing the ultrafilters (the central idea)}
+
+Going up with Cohen forcing adds unbounded reals.
+What we'd like is to keep it that way when going right with Mathias forcing.
+Also we would like to have our diagram commute (as shown in the picture before).
+That what this means formally is the following:
+\begin{claim}
+  Let $\calM_1$ and $\calM_2$ be models of \textbf{ZFC} such that $\calM_1$ is an inner model of $\calM_2$.
+  Let $g \in \omega_\omega \cap \calM_2$ be unbounded over $\calM_1$ and let $\calU_1$ be an ultrafilter in $\calM_1$.
+  Then there exists and ultrafilter $\calU_2$ in $\calM_2$ such that:
+  \begin{enumerate}[(1)]
+    \item $\calU_1 \subseteq \calU_2$ and every maximal antichain in $\M(\calU_1)$ is a maximal antichain in $\M(\calU_2)$.
+    \item If $f \in \calM_1$ is a normalized $\M(\calU_1)$-name for a real, then
+      \[
+        \Vdash_{\M(\calU_2)} \text{``$\tau_f$ does not dominate $\mathring{g}$``}.
+      \]
+  \end{enumerate}
+\end{claim}
+
+We shall proceed as in \cite{BlassShelah1989}, albeit more carefully.
+Before we dive into the proof, let's make some clarifying remarks:
+
+Having $(1)$ means that if $G_2$ is a $\M(\calU_2)$-generic in $\calM_2$, then the set $G_1 := G_2 \cap \M(\calU_1)$ is $\M(\calU_1)$-generic in $\calM_1$, since it intersects every maximal antichain in $\calM(\calU_1)$.
+Also, the Mathias real $s(G_2)$ from adjoining $G_2$ to $\calM_2$ is the same as the Mathias real $s(G_1)$ from adjoining $G_1$ to $\calM_1$.
+This is true, because if $(a, A) \in G_2$ forces $a \subseteq s(G_2)$, then $(a, \omega \setminus \min A)$ is in $G_2$ (because it is closed upwards).
+Also, $\omega \setminus \min A$ is cofinite, so it trivially belongs to $\calU_1$, thus $(a, \omega \setminus \min A) \in G_1$.
+This condition would force $a \subseteq s(G_1)$.
+Since $G_1 \subseteq G_2$, the converse direction is trivial.
+
+Another fact that would follow from $(1)$ is that any normalized $\calM(\calU_1)$-name $f$ for a real is also a normalized $\calM(\calU_2)$-name.
+In fact, $f$ is a name for the same real, in the sense that $f_{G_1} = f_{G_2}$.
+So the third statement is well-defined.
+
+Last thing that we shall comment on before the actual proof, is that statement $(2)$ is equivalent to statement $(2')$ which is obtained by replacing ``dominate`` with ``totally dominate`` in statement $(2)$.
+Clearly, $(2')$ follows from $(2)$.
+Now suppose $f$ is a counterexample for $(2)$.
+Then, there exists a forcing condition $p$ and a $k \in \omega$, such that
+\[
+  p \Vdash_{\M(\calU_2)} (\forall n \geq \check{k})(\tau_f(n) \geq \mathring{g}(n)).
+\]
+We can easily change $f$ to a normalized name $f'$ (by bumping up the possible values of $f$ for $0, \dots, k$), so that
+\[
+  p \Vdash_{\M(\calU_2)} (\forall n \in \omega)(\tau_{f'}(n) \geq \mathring{g}(n)).
+\]
+Thus, a counterexample for $(2)$ will produce a counterexample for $(2')$.
+
+\section*{Constructing the ultrafilters (formally)}
+
+T.B.D.
+
+\section*{Why $\domnumber = \continuum = \lambda$?}
+
 T.B.D.
 
 \newpage
