@@ -287,12 +287,12 @@ We have proved that neither $X$ nor $\omega \setminus X$ includes a member of $\
 Before proceeding forward.
 We shall introduce (as it was done in \cite{BlassShelah1989}) a new type of name for functions $f : \omega \longrightarrow \omega$.
 Let $(\bbP, \leq)$ be a forcing poset in a model $\calM$ of \textbf{ZFC}.
-A normalized $\bbP$-name for a function in $\calM$ will be every $f = (A_n, f_n)_{n \in \omega}$, such that
+A normalized $\bbP$-name for a function in $\calM$ will be every $f = (W_n, f_n)_{n \in \omega}$, such that
 \begin{itemize}
-  \item $A_n$ is a maximal antichain.
-  \item $f_n : A_n \longrightarrow \omega$.
+  \item $W_n$ is a maximal antichain.
+  \item $f_n : W_n \longrightarrow \omega$.
 \end{itemize}
-Let $G$ be a $\bbP$-generic filter in $\calM$.
+Let $G$ be a $\bbP$-generic filter over $\calM$.
 Then the denotation of $f$ with respect to $G$ (written as $f_G$) is the function
 \[
   \{ (n, f_n(p)) \mid n \in \omega \logand p \in G \cap W_n \}.
@@ -301,7 +301,7 @@ Since for each $n \in \omega$ the set $G \cap W_n$ is a singleton, $f_G$ is a we
 
 We will prove the this notion of naming for functions is equivalent to the usual one.
 \begin{claim}
-  For every normalized $\bbP$-name $f \in \calM$ there exists a standard $\bbP$-name $\tau^{f} \in \calM$, such that for each $\bbP$-generic filter $G$ in $\calM$:
+  For every normalized $\bbP$-name $f \in \calM$ there exists a standard $\bbP$-name $\tau^{f} \in \calM$, such that for each $\bbP$-generic filter $G$ over $\calM$:
   \[
     f_G = (\tau_f)_G.
   \]
@@ -316,7 +316,7 @@ We will prove the this notion of naming for functions is equivalent to the usual
 \end{proof}
 
 \begin{claim}
-  For every standard $\bbP$-name $\tau \in \calM$ for a function there exists a normalized $\bbP$-name $f \in \calM$, such that for each $\bbP$-generic filter $G$ in $\calM$:
+  For every standard $\bbP$-name $\tau \in \calM$ for a function there exists a normalized $\bbP$-name $f \in \calM$, such that for each $\bbP$-generic filter $G$ over $\calM$:
   \[
     \tau_G = f_G.
   \]
@@ -329,14 +329,14 @@ We will prove the this notion of naming for functions is equivalent to the usual
   \]
   Then for each $n \in \omega$, the following set is dense
   \[
-    D_n = \{ p \in \bbP \mid (\exists k \in \omega)(p \Vdash_\bbP \tau(k) = \check{n}) \}.
+    D_n = \{ p \in \bbP \mid (\exists k \in \omega)(p \Vdash_\bbP \tau(\check{n}) = k) \}.
   \]
-  For each $n \in \omega$, choose (by Zorn's lemma) a maximal antichain $A_n \subseteq D_n$.
+  For each $n \in \omega$, choose (by Zorn's lemma) a maximal antichain $W_n \subseteq D_n$.
   Define the function $f_n$ as follows
   \[
-    f_n(p) = k_p \text{ for all } p \in A_n \text{, where } k_p \in \omega \text{ is the unique witness to } p \in D_n.
+    f_n(p) = k_p \text{ for all } p \in W_n \text{, where } k_p \in \omega \text{ is the unique witness to } p \in D_n.
   \]
-  Set $f = (A_n, f_n)_{n \in \omega}$.
+  Set $f = (W_n, f_n)_{n \in \omega}$.
   The rest is easy to check.
 \end{proof}
 
@@ -346,7 +346,7 @@ Working below a certain condition, one can obtain an even stronger result than t
   \[
     p \Vdash_\bbP \tau : \omega \longrightarrow \omega.
   \]
-  Then there exists a normalized name $f$ such that for each $\bbP$-generic filter $G$ in $\calM$ containing $p$, we have
+  Then there exists a normalized name $f$ such that for each $\bbP$-generic filter $G$ over $\calM$ containing $p$, we have
   \[
     \tau_G = f_G.
   \]
@@ -355,20 +355,20 @@ Working below a certain condition, one can obtain an even stronger result than t
 \begin{proof}
   Like previously, for each $n \in \omega$, the following sets are dense below $p$
   \[
-    D^p_n = \{ q \in \bbP \mid q \leq p \logand (\exists k \in \omega)(p \Vdash_\bbP \tau(k) = \check{n}) \}.
+    D^p_n = \{ q \in \bbP \mid q \leq p \logand (\exists k \in \omega)(p \Vdash_\bbP \tau(\check{n}) = k) \}.
   \]
-  Now choose for each $n \in \omega$, a maximal antichain $A^p_n$ that is a subset of $D^p_n$.
-  For each $q \in A^p_n$ choose a witness $k_q \in \omega$ to $q \in D^p_n$.
-  Let $A$ be a maximal antichain that is incompatible with $p$.
-  Then for each $n \in \omega$, the set $A_n = A^p_n \cup A$ is a maximal antichain in $\bbP$, for an element that is incompatible with $A_n$ must be compatible with one in $A$ due to maximality and vice versa.
+  Now choose for each $n \in \omega$, a maximal antichain $W^p_n$ that is a subset of $D^p_n$.
+  For each $q \in W^p_n$ choose a witness $k_q \in \omega$ to $q \in D^p_n$.
+  Let $W$ be a maximal antichain that is incompatible with $p$.
+  Then for each $n \in \omega$, the set $W_n = W^p_n \cup W$ is a maximal antichain in $\bbP$, for an element that is incompatible with $W_n$ must be compatible with one in $W$ due to maximality and vice versa.
   Define the function $f_n$ as follows
   \[
     f_n(p) = \begin{cases} 
-               k_p, & \text{if } p \in A_n^p \\ 
-               0,   & \text{if } p \in A.
+               k_p, & \text{if } p \in W_n^p \\ 
+               0,   & \text{if } p \in W.
              \end{cases}
   \]
-  Set $f = (A_n, f_n)_{n \in \omega}$.
+  Set $f = (W_n, f_n)_{n \in \omega}$.
   The rest is easy to check.
 \end{proof}
 
@@ -380,7 +380,7 @@ Going up with Cohen forcing adds unbounded reals.
 What we'd like is to keep it that way when going right with Mathias forcing.
 Also we would like to have our diagram commute (as shown in the picture before).
 That what this means formally is the following:
-\begin{lemma}\label{main-lemma}
+\begin{lemma}\thlabel{main-lemma}
   Let $\calM_1$ and $\calM_2$ be models of \textbf{ZFC} such that $\calM_1$ is an inner model of $\calM_2$.
   Let $g \in \omega_\omega \cap \calM_2$ be unbounded over $\calM_1$ and let $\calU_1$ be an ultrafilter in $\calM_1$.
   Then there exists and ultrafilter $\calU_2$ in $\calM_2$ such that:
@@ -440,13 +440,13 @@ Thus, a counterexample for $(2)$ will produce a counterexample for $(2')$.
   Since $L$ is not maximal in $\M(\calU_2)$, there is a condition $(a, A)$ in $\M(\calU_2)$ that is incompatible with all elements of $L$.
   We will call the set $A$ (which is a set in $\calU_2 \setminus \calU_1$) \textit{forbidden (of the first type)} by $a$ and $L$.
   
-  A violation of $(2')$ (and equivalently of $(2)$) is a normalized name $f = (A_n, f_n)_{n \in \omega}$ and a condition $(b, B)$ in $\M(\calU_2)$ such that
+  A violation of $(2')$ (and equivalently of $(2)$) is a normalized name $f = (W_n, f_n)_{n \in \omega}$ and a condition $(b, B)$ in $\M(\calU_2)$ such that
   \[
     (b, B) \Vdash_{\M(\calU_2)} (\forall n \in \omega) (\tau_f(n) \geq \mathring{g}(n)).
   \]
   Since $f$ is a normalized name, we can reformulate this as follows
   \[
-    (b, B) \text{ is incompatible with every } p \in A_n \text{ such that } f_n(p) < g(n).
+    (b, B) \text{ is incompatible with every } p \in W_n \text{ such that } f_n(p) < g(n).
   \]
   In such cases we will call $B$ \textit{forbidden (of the second type)} by $f$ and $b$.
 
@@ -477,7 +477,7 @@ Thus, a counterexample for $(2)$ will produce a counterexample for $(2')$.
   I claim that for every $n \in \omega$ there is a $h(n) > n$ such that whenever $Z \cap [n, h(n))$ is partitioned into $2k$ pieces there is a piece $P$ of the partition such that:
   \begin{enumerate}[(i)]
     \item For each $1 \leq i \leq k$ there is a set $e \subseteq P$ such that $a_i \cup P$ is permitted by an element of $L_i$.
-    \item For each $1 \leq i \leq k$ there is a set $e \subseteq P$ such that $b_i \cup P$ is permitted by some $p \in A_n$ such that $f_n(p) < h(n)$.
+    \item For each $1 \leq i \leq k$ there is a set $e \subseteq P$ such that $b_i \cup P$ is permitted by some $p \in W_n$ such that $f_n(p) < h(n)$.
   \end{enumerate}
   Clearly, this claim is absolute, so we will prove it in $\calM_1$.
   Suppose that for some $n \in \omega$ this were not true.
@@ -553,13 +553,13 @@ Thus, a counterexample for $(2)$ will produce a counterexample for $(2')$.
   This contradicts our assumption about $g$ not being dominated by any function in $\calM_1$.
 \end{proof}
 
-The way that we would proceed with using \cref{main-lemma} is by building a $\lambda$-tower of ultrafilters (going up means using \cref{main-lemma} for the appropriate Cohen real) and then do Mathias forcing relativized to those ultrafilters.
+The way that we would proceed with using \thref{main-lemma} is by building a $\lambda$-tower of ultrafilters (going up means using \thref{main-lemma} for the appropriate Cohen real) and then do Mathias forcing relativized to those ultrafilters.
 Then build a tower again using the same technique and go right by Mathias forcing.
 We do this tower-building $\kappa$ many times.
 
 Here's a reminder of what we want locally:
 \begin{figure}[htbp]
-  \centering
+  \noindent\hspace*{3cm}
   \begin{tikzpicture}[node distance=5cm, auto, >=stealth]
     % Define nodes with bullet dots and precise label distance
     \node[label={[label distance=-1pt]215:$V_{\alpha, \beta}$}] (Vab) at (0,0) {$\bullet$};
@@ -593,8 +593,11 @@ Here's a reminder of what we want locally:
 
 \section*{Constructing the ultrafilters (formally)}
 
-T.B.D.
-
+For each $\alpha \leq \lambda$ and $\beta < \kappa$, we will define an ultrafilter $\calU_{\alpha, \beta}$, so that the ultrafilter
+\[
+  \calU_\beta := \calU_{\lambda, \beta}
+\]
+will be the ultrafilter that is used in the $\beta$-th Mathias forcing (which, as previously noted, yields $s_\beta$).
 \section*{Why $\domnumber = \continuum = \lambda$?}
 
 T.B.D.
