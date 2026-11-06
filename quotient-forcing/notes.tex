@@ -1,6 +1,7 @@
 \documentclass[12pt]{article}\usepackage[english]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[T2A]{fontenc}
+\usepackage{bbm}
 \usepackage{amssymb}
 \usepackage{enumerate}
 \usepackage{hyperref, fancyhdr, lastpage, fancyvrb, tcolorbox, titlesec}
@@ -54,6 +55,8 @@
 \newcommand{\M}{\mathbb{M}}
 \newcommand{\bbH}{\mathbb{H}}
 \newcommand{\bbP}{\mathbb{P}}
+\newcommand{\bbA}{\mathbb{A}}
+\newcommand{\one}{\mathbbm{1}}
 
 \newcommand{\vars}{\operatorname{Vars}}
 \newcommand{\free}{\operatorname{Free}}
@@ -93,6 +96,7 @@
 \newcommand{\dequiv}{\stackrel{\text{деф.}}{\longleftrightarrow}}
 
 \newcommand{\db}[1]{\llbracket #1 \rrbracket}
+\newcommand{\red}[1]{\operatorname{red}(#1)}
 
 \DeclareMathOperator*{\bigand}{\scalerel*{\&}{\prod}}
 \DeclareMathOperator*{\bigor}{\scalerel*{\lor}{\sum}}
@@ -101,6 +105,7 @@
 \newtheorem*{definition}{Definition}
 \newtheorem*{theorem}{Theorem}
 \newtheorem{claim}{Claim}
+\newtheorem{corollary}{Corollary}
 \newtheorem{lemma}{Lemma}
 \newtheorem*{fact}{Fact}
 \theoremstyle{remark}
@@ -132,11 +137,11 @@ Observe that $\Q/G$ is upward closed and $h[G] \subseteq \Q/G$.
 \begin{proof}
   First, note that by definition
   \[
-    \text{$p$ is a reduction of $r$ to $\bbP$ iff } (\forall p_1 \in \bbP)(h(p_1) \perp r \Rightarrow p_1 \perp p).
+    \text{$p$ is a reduction of $r$ to $\bbP$ iff } (\forall p_1 \in \bbP)(h(p_1) \perp r \Longrightarrow p_1 \perp p).
   \]
   Then, observe that
   \[
-    p \Vdash_\bbP r \in \check{\Q}/\mathring{G} \text{ iff } p \Vdash_\bbP (\forall p_1 \in \bbP)(h(p_1) \perp r \Rightarrow p_1 \notin \mathring{G}).
+    p \Vdash_\bbP r \in \check{\Q}/\mathring{G} \text{ iff } p \Vdash_\bbP (\forall p_1 \in \bbP)(h(p_1) \perp r \Longrightarrow p_1 \notin \mathring{G}).
   \]
   Looking at the right side, the consequent of its implication is the only thing that depends on an evaluation of the generic filter, thus the whole thing is equivalent to
   \[
@@ -148,17 +153,69 @@ Observe that $\Q/G$ is upward closed and $h[G] \subseteq \Q/G$.
   \]
 \end{proof}
 
-Now, we can define a $\bbP$-name $\R$ for $\Q/G$ as follows:
+Now, we can define a $\bbP$-name $\Q/\bbP$ for $\Q/G$ as follows:
 \[
-  \R = \{ (\check{r}, p) \mid r \in \Q, p \in \bbP \text{ and $p$ is a reduction of $r$ to $\bbP$} \}.
+  \Q/\bbP = \{ (\check{r}, p) \mid r \in \Q, p \in \bbP \text{ and $p$ is a reduction of $r$ to $\bbP$} \}.
 \]
+The order for $\Q/\bbP$, since $\Q/G \subseteq \Q$, would just come from a name for $\leq_\Q$.
+
+\newpage
 
 \begin{claim}
-  With the above names $\bbP \ast \R$ and $\Q$ are forcing equivalent.
+  With the above names $\bbP \ast \Q/\bbP$ and $\Q$ are forcing equivalent.
 \end{claim}
 
 \begin{proof}
-  We shall do this by showing that the poset $\bbP \ast \R$ can be embedded into the boolean completion of the poset $\Q$.
+  We shall do this by showing that the poset $\bbP \ast \Q/\bbP$ can be embedded into the same poset.
+  We proceed as in \cite[Lemma V.4.45]{Kunen2013}.
+  By $\red{p, q}$ we will mean
+  \[
+    p \text{ is a reduction of } q \text{ to } \bbP.
+  \]
+  First, note that
+  \[
+    \bbP \ast \Q/\bbP \cong \{ (p, q) \in \bbP \times \Q \mid \red{p, q} \}.
+  \]
+  From now we will work with the right poset, call it $\red{\bbP, \Q}$.
+
+  Let $i : \Q \longrightarrow \bbA^+$ be the dense embedding from $\Q$ to its boolean completion $\bbA$.
+  We shall produce a dense embedding $j : \red{\bbP, \Q} \longrightarrow \bbA^+$ as follows:
+  \[
+    j(p, q) = i(h(p)) \land_\bbA i(q) \text{ for all } (p, q) \in \red{\bbP, \Q}.
+  \]
+  Let's check that $j$ is a dense embedding.
+  First, note that $\one_{\red{\bbP, \Q}} = (\one_\bbP, \one_\Q)$ and
+  \[
+    j(\one_\bbP, \one_\Q) = i(h(\one_\bbP)) \land_\bbA i(\one_\Q) = i(\one_\Q) \land_\bbA i(\one_\Q) = \one_\bbA \land_\bbA \one_\bbA = \one_\bbA.
+  \]
+  Furthermore, if $(p_1, q_1), (p_2, q_2) \in \red{\bbP, \Q}$ are such that $(p_1, q_1) \leq_{\red{\bbP, \Q}} (p_2, q_2)$, then
+  \begin{align*}
+    j(p_1, q_1) &=    i(h(p_1)) \land_\bbA i(q_1) &(\text{by definition of } j) \\ 
+                &\leq i(h(p_2)) \land_\bbA i(q_1) &(i \text{ and } h \text{ are dense embeddings and } p_1 \leq_\bbP p_2) \\
+                &\leq i(h(p_2)) \land_\bbA i(q_2) &(i \text{ is a dense embedding and } q_1 \leq_\Q q_2) \\
+                &=    j(p_2, q_2).                &(\text{by definition of } j) 
+  \end{align*}
+  Moreover, we shall prove that for all $(p_1, q_1),(p_2, q_2) \in \red{\bbP, \Q}$,
+  \[
+    (p_1, q_1) \not\perp_{\red{\bbP, \Q}} (p_2, q_2) \iff j(p_1, q_1) \not\perp_{\bbA^+} j(p_2, q_2).
+  \]
+  The $\Longrightarrow$ direction is easy, it comes from the order preservation.
+  For the $\Longleftarrow$ direction, let $a \in \bbA^+$ be such that
+  \[
+    a \leq_{\bbA^+} j(p_1, q_1) = i(h(p_1)) \land_\bbA i(q_1) \text{ and } a \leq_{\bbA^+} j(p_2, q_2) = i(h(p_2)) \land_\bbA i(q_2)
+  \]
+  Then, since $i$ is a dense embedding, there is an $q \in \Q$, such that
+  \[
+    q \leq_\Q q_1, q_2, h(p_1), h(p_2).
+  \]
+  Since $h$ is dense, then there is a $p$ such that $h(p) \leq_\Q q$.
+  Then by order preservation of $h$, $p \leq_\bbP p_1, p_2$.
+  Also, $\red{p, q}$, since (again by order preservation of $h$):
+  \[
+    (\forall p' \in \bbP)(p' \not\perp_\bbP p \Longrightarrow h(p') \not\perp_\Q q).
+  \]
+  Thus $(p, q) \leq_{\red{\bbP, \Q}} (p_1, q_1), (p_2, q_2)$.
+  Finally, from the definition of $j$, for every $(p, q) \in \red{\bbP, \Q}$ we have $j(p, q) \leq_{\bbA^+} i(q)$, therefore $\operatorname{Rng}(j)$ is dense in $\bbA^+$.
 \end{proof}
 
 \begin{claim}\label{quotient-name}
@@ -252,6 +309,8 @@ Now, we can define a $\bbP$-name $\R$ for $\Q/G$ as follows:
   \]
   so we are done.
 \end{proof}
+
+\newpage
 
 \bibliographystyle{alpha}
 \bibliography{../refs.bib}
