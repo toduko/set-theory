@@ -5,6 +5,6 @@ A collection of my notes and proofs in set theory, focusing on forcing and cardi
 ## Covered Topics
 
 - *Blass and Shelah's paper 'Ultrafilters with small generating sets'* - WORK IN PROGRESS
+- *Quotient Forcing and its Connection to Iterated Forcing* - WORK IN PROGRESS
 - *Hechler MAD Forcing* - WORK IN PROGRESS
-- *Quotient Forcing* - WORK IN PROGRESS
 - *The Martin-Solovay Theorem*
